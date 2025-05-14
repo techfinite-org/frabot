@@ -1,7 +1,7 @@
 *** Settings ***
 Library    SeleniumLibrary
 Library    String
-Library    ./frabot/libraries/keyword_utilities.py
+Library    ../libraries/keyword_utilities.py
 
 
 *** Keywords ***
@@ -9,10 +9,11 @@ Library    ./frabot/libraries/keyword_utilities.py
 Login
     [Arguments]    ${url}    ${username}    ${password}   ${browser}=chrome
     Open Browser                     ${url}               ${browser}
+    Maximize Browser Window
     Input Text                       id=login_email       ${username}
     Input Text                       id=login_password    ${password}
     Click Element                    css=.btn-login
-    Wait Until Element Is Visible    id=navbar-search    timeout=30s
+    Wait Until Element Is Visible    id=navbar-search     30s
 
 
 Go To URL
@@ -48,8 +49,17 @@ New Doc
         Open Doctype    ${Doctype}
     END
     ${label}=                        Catenate   SEPARATOR=${SPACE}   Add  ${Doctype}
-    Wait Until Element Is Visible    xpath=//button[contains(., 'label')]    timeout=30s
-    Click Element                    xpath=//button[contains(., 'label')]
+    Wait Until Element Is Visible    xpath=//button[contains(., "${label}")]    30s
+    Click Element                    xpath=//button[contains(., "${label}")]
+
+
+
+SELECT
+    [Arguments]    ${field_name}    ${value}
+    Sleep       5s
+    Wait Until Element Is Visible       xpath=//select[@class="input-with-feedback form-control ellipsis bold"]    5
+
+
 
 
 
