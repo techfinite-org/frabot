@@ -55,12 +55,12 @@ New Doc
 
 Select
      [Arguments]    ${doctype}     ${field_name}    ${value}
-     Wait Until Element Is Visible       xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]    30
+     Wait Until Element Is Visible       xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]    30s
      Select From List By Value           xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${doctype}"]    ${value}
 
 Select Link
     [Arguments]    ${doctype}     ${field_name}    ${value}
-    Wait Until Element Is Visible       xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     30
+    Wait Until Element Is Visible       xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     30s
     Input Text                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     ${value}
     Sleep                               2s
     Press Keys                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     RETURN
@@ -69,21 +69,16 @@ Select Link
 
 Click Button
     [Arguments]    ${doctype}     ${field_name}
-    Wait Until Element Is Visible       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     30
+    Wait Until Element Is Visible       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     30s
     Click Element                       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Attach
+    [Arguments]    ${doctype}     ${field_name}  ${value}
+    Click Button                        ${doctype}                                                                          ${field_name}
+    Wait Until Element Is Visible       xpath=//input[@type='file']                                                         10s
+    Execute Javascript                  document.querySelector("input[type='file']").classList.remove("hidden")
+    Wait Until Element Is Visible       xpath=//input[@type='file']                                                         10s
+    Choose File                         xpath=//input[@type='file']                                                         ${value}
+    Sleep                               2s
+    Wait Until Element Is Visible       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']                   10s
+    Click Element                       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']
