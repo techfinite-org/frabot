@@ -73,12 +73,12 @@ Click Button
     Click Element                       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]
 
 Attach
-    [Arguments]    ${doctype}     ${field_name}  ${value}
-    Click Button                        ${doctype}                                                                          ${field_name}
-    Wait Until Element Is Visible       xpath=//input[@type='file']                                                         10s
+    [Arguments]    ${doctype}     ${field_name}    ${value}
+    Click Button                        ${doctype}                                                                 ${field_name}
+    Wait Until Page Contains Element    xpath=//input[@type='file']                                                10s
     Execute Javascript                  document.querySelector("input[type='file']").classList.remove("hidden")
-    Wait Until Element Is Visible       xpath=//input[@type='file']                                                         10s
-    Choose File                         xpath=//input[@type='file']                                                         ${value}
-    Sleep                               2s
-    Wait Until Element Is Visible       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']                   10s
+    Wait Until Element Is Visible       xpath=//input[@type='file']                                                10s
+    Choose File                         xpath=//input[@type='file']                                                ${value}
+    Wait Until Element Is Visible       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']          10s
     Click Element                       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']
+    Sleep                               5s
