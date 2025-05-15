@@ -82,3 +82,16 @@ Attach
     Choose File                         xpath=//input[@type='file']                                                ${value}
     Wait Until Element Is Visible       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']          ${config}[max_wait_time]
     Click Element                       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']
+
+Save
+    Wait Until Element Is Visible       xpath=//button[@data-label='Save']      ${config}[max_wait_time]
+    Click Element                       xpath=//button[@data-label='Save']
+
+Select All
+    Wait Until Element is Visible       xpath=//input[@type="checkbox" and @title="Select All"]     ${config}[max_wait_time]
+    Select Checkbox                     xpath=//input[@type="checkbox" and @title="Select All"]
+
+
+
+
+
