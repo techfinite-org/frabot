@@ -81,4 +81,3 @@ Attach
     Choose File                         xpath=//input[@type='file']                                                ${value}
     Wait Until Element Is Visible       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']          10s
     Click Element                       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']
-    Sleep                               5s
