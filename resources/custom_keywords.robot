@@ -33,31 +33,52 @@ Check URL
 
 
 Open Doctype
-    [Arguments]    ${Doctype}
-    ${doctype_list}=    Catenate     SEPARATOR=${SPACE}   ${Doctype}       List
+    [Arguments]    ${doctype}
+    ${doctype_list}=    Catenate     SEPARATOR=${SPACE}   ${doctype}       List
     Wait Until Element Is Visible    id=navbar-search     timeout=30s
     Click Element                    id=navbar-search
     Input Text                       id=navbar-search     ${doctype_list}
     Press Keys                       id=navbar-search     RETURN
-    Wait Until Keyword Succeeds      30s                  1s               Check URL    ${Doctype}
+    Wait Until Keyword Succeeds      30s                  1s               Check URL    ${doctype}
 
 
 New Doc
-    [Arguments]    ${Doctype}
+    [Arguments]    ${doctype}
     ${result}=     Run Keyword And Return Status    Check URL    ${Doctype}
     IF    not ${result}
-        Open Doctype    ${Doctype}
+        Open Doctype    ${doctype}
     END
-    ${label}=                        Catenate   SEPARATOR=${SPACE}   Add  ${Doctype}
+    ${label}=                        Catenate   SEPARATOR=${SPACE}   Add  ${doctype}
     Wait Until Element Is Visible    xpath=//button[contains(., "${label}")]    30s
     Click Element                    xpath=//button[contains(., "${label}")]
 
 
+Select
+     [Arguments]    ${doctype}     ${field_name}    ${value}
+     Wait Until Element Is Visible       xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]    30
+     Select From List By Value           xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${doctype}"]    ${value}
 
-SELECT
-    [Arguments]    ${field_name}    ${value}
-    Sleep       5s
-    Wait Until Element Is Visible       xpath=//select[@class="input-with-feedback form-control ellipsis bold"]    5
+Select Link
+    [Arguments]    ${doctype}     ${field_name}    ${value}
+    Wait Until Element Is Visible       xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     30
+    Input Text                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     ${value}
+    Sleep                               2s
+    Press Keys                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     RETURN
+
+
+
+Click Button
+    [Arguments]    ${doctype}     ${field_name}
+    Wait Until Element Is Visible       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     30
+    Click Element                       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]
+
+
+
+
+
+
+
+
 
 
 
