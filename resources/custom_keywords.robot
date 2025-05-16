@@ -1,7 +1,8 @@
 *** Settings ***
-Library    SeleniumLibrary
-Library    String
-Library    ./frabot/libraries/keyword_utilities.py
+Library           SeleniumLibrary
+Library           String
+Library           ../libraries/keyword_utilities.py
+Variables         ../libraries/variables.py
 
 
 *** Keywords ***
@@ -9,10 +10,11 @@ Library    ./frabot/libraries/keyword_utilities.py
 Login
     [Arguments]    ${url}    ${username}    ${password}   ${browser}=chrome
     Open Browser                     ${url}               ${browser}
+    Maximize Browser Window
     Input Text                       id=login_email       ${username}
     Input Text                       id=login_password    ${password}
     Click Element                    css=.btn-login
-    Wait Until Element Is Visible    id=navbar-search    timeout=30s
+    Wait Until Element Is Visible    id=navbar-search     ${config}[max_wait_time]
 
 
 Go To URL
@@ -32,25 +34,62 @@ Check URL
 
 
 Open Doctype
-    [Arguments]    ${Doctype}
-    ${doctype_list}=    Catenate     SEPARATOR=${SPACE}   ${Doctype}       List
-    Wait Until Element Is Visible    id=navbar-search     timeout=30s
+    [Arguments]    ${doctype}
+    ${doctype_list}=    Catenate     SEPARATOR=${SPACE}         ${doctype}                List
+    Wait Until Element Is Visible    id=navbar-search           ${config}[max_wait_time]
     Click Element                    id=navbar-search
-    Input Text                       id=navbar-search     ${doctype_list}
-    Press Keys                       id=navbar-search     RETURN
-    Wait Until Keyword Succeeds      30s                  1s               Check URL    ${Doctype}
+    Input Text                       id=navbar-search           ${doctype_list}
+    Press Keys                       id=navbar-search           RETURN
+    Wait Until Keyword Succeeds      ${config}[max_wait_time]                              1s    Check URL   ${doctype}
 
 
 New Doc
-    [Arguments]    ${Doctype}
+    [Arguments]    ${doctype}
     ${result}=     Run Keyword And Return Status    Check URL    ${Doctype}
     IF    not ${result}
-        Open Doctype    ${Doctype}
+        Open Doctype    ${doctype}
     END
-    ${label}=                        Catenate   SEPARATOR=${SPACE}   Add  ${Doctype}
-    Wait Until Element Is Visible    xpath=//button[contains(., 'label')]    timeout=30s
-    Click Element                    xpath=//button[contains(., 'label')]
+    ${label}=                        Catenate   SEPARATOR=${SPACE}   Add  ${doctype}
+    Wait Until Element Is Visible    xpath=//button[contains(., "${label}")]    ${config}[max_wait_time]
+    Click Element                    xpath=//button[contains(., "${label}")]
 
+
+Select
+     [Arguments]    ${doctype}     ${field_name}    ${value}
+     Wait Until Element Is Visible       xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]    ${config}[max_wait_time]
+     Select From List By Value           xpath=//select[@data-fieldname="${field_name}" and @data-doctype="${doctype}"]    ${value}
+
+Select Link
+    [Arguments]    ${doctype}     ${field_name}    ${value}
+    Wait Until Element Is Visible       xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     ${config}[max_wait_time]
+    Input Text                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     ${value}
+    Sleep                               2s
+    Press Keys                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     RETURN
+
+
+
+Click Button
+    [Arguments]    ${doctype}     ${field_name}
+    Wait Until Element Is Visible       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     ${config}[max_wait_time]
+    Click Element                       xpath=//button[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]
+
+Attach
+    [Arguments]    ${doctype}     ${field_name}    ${value}
+    Click Button                        ${doctype}                                                                 ${field_name}
+    Wait Until Page Contains Element    xpath=//input[@type='file']                                                ${config}[max_wait_time]
+    Execute Javascript                  document.querySelector("input[type='file']").classList.remove("hidden")
+    Wait Until Element Is Visible       xpath=//input[@type='file']                                                ${config}[max_wait_time]
+    Choose File                         xpath=//input[@type='file']                                                ${value}
+    Wait Until Element Is Visible       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']          ${config}[max_wait_time]
+    Click Element                       xpath=//button[@class='btn btn-primary btn-sm btn-modal-primary']
+
+Save
+    Wait Until Element Is Visible       xpath=//button[@data-label='Save']      ${config}[max_wait_time]
+    Click Element                       xpath=//button[@data-label='Save']
+
+Select All
+    Wait Until Element is Visible       xpath=//input[@type="checkbox" and @title="Select All"]     ${config}[max_wait_time]
+    Select Checkbox                     xpath=//input[@type="checkbox" and @title="Select All"]
 
 
 

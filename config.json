@@ -1,0 +1,7 @@
+{
+  "max_wait_time": 30,
+  "min_wait_time": 5,
+  "enable_grid"  : 0,
+  "grid_url"     : "",
+  "args"         : []
+}
