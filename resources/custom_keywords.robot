@@ -147,6 +147,13 @@ Is Saved
     ...    Return From Keyword    False
 
     Return From Keyword    True
+    
+Get Doc Value
+    [Arguments]    ${field_name}
+    ${value}=    Execute Javascript    return cur_frm.doc.${field_name};
+    RETURN    ${value}
+    
+    
 
 
 
