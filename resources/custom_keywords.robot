@@ -66,6 +66,10 @@ Select Link
     Sleep                               2s
     Press Keys                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]     RETURN
 
+Data
+     [Arguments]    ${doctype}     ${field_name}    ${value}
+     Wait Until Element Is Visible       xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${Doctype}"]    ${config}[max_wait_time]
+     Input Text                          xpath=//input[@data-fieldname="${field_name}" and @data-doctype="${doctype}"]    ${value}
 
 
 Click Button
@@ -107,15 +111,28 @@ Get Current Doctype Name
     ${doctype}=    Execute Javascript    return cur_frm.doctype;
     RETURN         ${doctype}
 
+Get Field Type
+    [Arguments]    ${fieldname}
+    ${js}=    Catenate    SEPARATOR=\n
+    ...    var fieldname = '${fieldname}';
+    ...    var field = cur_frm.meta.fields.find(f => f.fieldname === fieldname);
+    ...    if(field) {
+    ...        return field.fieldtype;
+    ...    } else {
+    ...        throw(`Field '${fieldname}' not found`);
+    ...    }
+    ${fieldtype}=    Execute Javascript    ${js}
+    RETURN    ${fieldtype}
+
 Fill
-    [Arguments]     ${field_type}    ${field_name}     ${value}
-
-    ${normalized_type}=    Convert To Lowercase    ${field_type}
-
-    ${keyword_map}=    Create Dictionary
+    [Arguments]     ${field_name}     ${value}
+    ${field_type}=         Get Field Type          ${field_name}
+    ${normalized_type}=    Convert To Lowercase    ${field_type}    
+    ${keyword_map}=        Create Dictionary
     ...    select=Select
     ...    link=Select Link
     ...    date=Date
+    ...    data=Data
     ${doctype}=  Get Current Doctype Name
     ${has_key}=  Run Keyword And Return Status    Dictionary Should Contain Key    ${keyword_map}    ${normalized_type}
     Run Keyword If    ${has_key} != None
