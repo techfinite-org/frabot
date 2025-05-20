@@ -78,7 +78,7 @@ Click Button
 Attach
     [Arguments]   ${field_name}    ${value}
     ${doctype}=                         Get Current Doctype Name
-    Click Button                        ${doctype}                                                                 ${field_name}
+    Click Button                        ${field_name}
     Wait Until Page Contains Element    xpath=//input[@type='file']                                                ${config}[max_wait_time]
     Execute Javascript                  document.querySelector("input[type='file']").classList.remove("hidden")
     Wait Until Element Is Visible       xpath=//input[@type='file']                                                ${config}[max_wait_time]
