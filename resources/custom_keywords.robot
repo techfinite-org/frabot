@@ -170,7 +170,24 @@ Get Field Value
     ${value}=    Execute Javascript    return cur_frm.doc.${field_name};
     RETURN    ${value}
     
-    
+Delete Docs
+    [Arguments]    ${doctype}    @{names}
+    FOR    ${name}    IN    @{names}
+        ${script}=    Catenate    SEPARATOR=
+        ...    frappe.call({
+        ...        method: "frappe.client.delete",
+        ...        args: {
+        ...            doctype: "${doctype}",
+        ...            name: "${name}"
+        ...        },
+        ...        callback: function(r) {
+        ...            if (r.exc) {
+        ...               throw new Error("Failed to delete ${name}");
+        ...            }
+        ...        }
+        ...    });
+        Execute JavaScript    ${script}
+    END
 
 
 
