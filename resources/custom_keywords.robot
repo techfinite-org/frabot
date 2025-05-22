@@ -5,11 +5,19 @@ Library           ../libraries/custom_keywords.py
 Variables         ../libraries/variables.py
 
 
+
 *** Keywords ***
+Launch Browser
+    [Arguments]    ${url}    ${browser}=chrome
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${options}    add_argument    --headless
+    Call Method    ${options}    add_argument    --no-sandbox
+    Call Method    ${options}    add_argument    --disable-dev-shm-usage
+    Open Browser    ${url}    ${browser}    options=${options}
 
 Login
     [Arguments]    ${url}    ${username}    ${password}   ${browser}=chrome
-    Open Browser                     ${url}               ${browser}
+    Launch Browser                   ${url}               ${browser}
     Maximize Browser Window
     Input Text                       id=login_email       ${username}
     Input Text                       id=login_password    ${password}
