@@ -1,1 +1,4 @@
-Frabot
+frabot
+resources
+results
+tests
